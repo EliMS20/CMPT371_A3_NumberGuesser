@@ -20,10 +20,19 @@ def main():
 
     client.send("CONNECT".encode('utf-8'))
 
-    while True:
-        msg = input()
-        if msg:
-            client.send(msg.encode('utf-8'))
+    try:
+        while True:
+            msg = input()
+            if msg:
+                client.send(msg.encode('utf-8'))
+
+    except KeyboardInterrupt:
+        print("\nDisconnecting from server...")
+        client.send("DISCONNECT".encode('utf-8'))
+
+    finally:
+        client.close()
+        print("Disconnected.")
 
 if __name__ == "__main__":
     main()
