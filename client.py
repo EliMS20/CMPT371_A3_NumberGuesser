@@ -1,13 +1,22 @@
 import socket
 import threading
 
+stop_event = threading.Event()
+
 def receive(client):
     while True:
         try:
             msg = client.recv(1024).decode('utf-8')
             if msg:
                 print(f"\nServer: {msg}")
+            else:
+                # Empty message means server closed the connection
+                print("\nServer disconnected.")
+                stop_event.set()  # signal main thread to stop
+                break
         except:
+            print("\nLost connection to server.")
+            stop_event.set()  # signal main thread to stop
             break
 
 def main():
@@ -18,12 +27,13 @@ def main():
     thread.daemon = True
     thread.start()
 
-    client.send("CONNECT".encode('utf-8'))
+    name = input("Enter your name: ")
+    client.send(f"CONNECT:{name}".encode('utf-8'))
 
     try:
-        while True:
+        while not stop_event.is_set():
             msg = input()
-            if msg:
+            if msg and not stop_event.is_set():
                 client.send(msg.encode('utf-8'))
 
     except KeyboardInterrupt:
