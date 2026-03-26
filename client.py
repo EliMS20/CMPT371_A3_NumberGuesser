@@ -12,7 +12,7 @@ def receive(client):
 
 def main():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(('127.0.0.1', 80))
+    client.connect(('127.0.0.1', 5050))
 
     thread = threading.Thread(target=receive, args=(client,))
     thread.daemon = True
