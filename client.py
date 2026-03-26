@@ -1,5 +1,6 @@
 import socket
 import threading
+import json
 
 def receive(client):
     while True:
@@ -18,10 +19,13 @@ def main():
     thread.daemon = True
     thread.start()
 
+
+    client.sendall(json.dumps({"type": "CONNECT"}).encode('utf-8'))
+
+    msg = input("Type message: ")
     while True:
-        msg = input()
         if msg:
-            client.send(msg.encode('utf-8'))
+            client.sendall(msg)
 
 if __name__ == "__main__":
     main()
