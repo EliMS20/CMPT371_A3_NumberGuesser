@@ -42,8 +42,8 @@ def game_loop(num_players):
 
         broadcast(f"\n=== ROUND {round_num}/{ROUNDS} ===\nGuess a number between 1 and 100: ")
 
-        while len(guesses) < len(clients):
-            pass
+        guess_event = threading.Event()
+        guess_event.wait(timeout=10)
 
         broadcast(f"\nThe number was {secret}!\n")
 
