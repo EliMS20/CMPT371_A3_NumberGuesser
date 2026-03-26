@@ -15,9 +15,16 @@ def handle_client(conn, addr):
             if not data:
                 break
 
-            if data == "CONNECT":
-                game.add_client(conn)
-                print(f"Client connected, total clients: {len(game.clients)}")
+            if data.startswith("CONNECT"):
+                # Parse name from "CONNECT:name"
+                name = data.split(":")[1] if ":" in data else "Unknown"
+                game.add_client(conn, name)
+                print(f"{name} connected, total clients: {len(game.clients)}")
+
+            elif data == "DISCONNECT":
+                print(f"{addr} disconnected voluntarily")
+                break
+
             else:
                 try:
                     game.submit_guess(conn, int(data))

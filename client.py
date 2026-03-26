@@ -10,13 +10,12 @@ def receive(client):
             if msg:
                 print(f"\nServer: {msg}")
             else:
-                # Empty message means server closed the connection
                 print("\nServer disconnected.")
-                stop_event.set()  # signal main thread to stop
+                stop_event.set()
                 break
         except:
             print("\nLost connection to server.")
-            stop_event.set()  # signal main thread to stop
+            stop_event.set()
             break
 
 def main():

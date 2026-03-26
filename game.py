@@ -4,9 +4,9 @@ import threading
 ROUNDS = 10
 GUESS_TIME = 10
 
-guesses = {}       # {name: guess}
-points = {}        # {name: total_points}
-names = {}         # {conn: name}
+guesses = {}
+points = {}
+names = {}
 lock = threading.Lock()
 clients = []
 guess_event = threading.Event()
@@ -22,7 +22,7 @@ def add_client(conn, name):
     with lock:
         clients.append(conn)
         names[conn] = name
-        points[name] = 0  # initialise by name not conn
+        points[name] = 0
 
 def remove_client(conn):
     with lock:
@@ -31,7 +31,6 @@ def remove_client(conn):
         name = names.pop(conn, None)
         if name and name in guesses:
             del guesses[name]
-        # note: don't delete from points so tally survives reconnects
 
 def submit_guess(conn, value):
     with lock:
@@ -79,7 +78,7 @@ def disconnect_all():
         clients.clear()
         guesses.clear()
         names.clear()
-        points.clear()  # wipe for next game
+        points.clear()
 
 def play_game():
     for round_num in range(1, ROUNDS + 1):
