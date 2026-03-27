@@ -1,5 +1,6 @@
 import socket
 import threading
+import os
 
 stop_event = threading.Event()
 
@@ -10,17 +11,24 @@ def receive(client):
             if msg:
                 print(f"\nServer: {msg}")
             else:
-                print("\nServer disconnected.")
+                print("\nServer disconnected. Press Enter to exit.")
                 stop_event.set()
-                break
+                client.close()
+                os._exit(0)  # force kill the whole program including blocked input()
         except:
-            print("\nLost connection to server.")
+            print("\nLost connection to server. Press Enter to exit.")
             stop_event.set()
+            os._exit(0)
             break
 
 def main():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(('127.0.0.1', 5050))
+
+    try:
+        client.connect(('127.0.0.1', 5050))
+    except ConnectionRefusedError:
+        print("Could not connect to server.")
+        return
 
     thread = threading.Thread(target=receive, args=(client,))
     thread.daemon = True
@@ -37,7 +45,10 @@ def main():
 
     except KeyboardInterrupt:
         print("\nDisconnecting from server...")
-        client.send("DISCONNECT".encode('utf-8'))
+        try:
+            client.send("DISCONNECT".encode('utf-8'))
+        except:
+            pass
 
     finally:
         client.close()
