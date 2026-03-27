@@ -9,6 +9,6 @@
 ## **Limitations**
 - Running with a large amount of clients connecting using threads could cause performance issues. No player max capacity set, and large player numbers have not been tested.
 - People disconnecting mid-game cannot reconnect
-- No security, all data is sent as normal plaintext and not encrypted.
+- No security, all data is sent as normal plaintext and is not encrypted.
 ## **WorkFlow**
 ## **Step by Step How To Guide**
