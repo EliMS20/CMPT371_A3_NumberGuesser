@@ -2,17 +2,35 @@ import socket
 import threading
 import game
 
+# SERVER IP AND PORT NUMBER
 HOST = '127.0.0.1'
 PORT = 5050
+
+# NUMBER OF EXPECTED PLAYERS FOR GAME
 NUM_PLAYERS = 2
 
+# CLIENT HANDLER
 def handle_client(conn, addr):
+    '''
+    handle_client(conn, addr) manages client inputs
+        Specifically, it handles the client's guess and applies the 
+            necessary game logic to it.
+    
+    arguments:
+        conn: A socket object that represents the connection between the server 
+            and a specific client.
+        addr: A tuple, (IP, port), which represents the client's network address.
+    '''
+
+    # The main client loop 
     try:
+        
+        # Continuously runs until a specific client disconnects or if the game ends.
         while True:
             data = conn.recv(1024).decode('utf-8').strip()
             if not data:
                 break
-
+            
             if data.startswith("CONNECT"):
                 name = data.split(":")[1] if ":" in data else "Unknown"
 
@@ -37,6 +55,7 @@ def handle_client(conn, addr):
 
     except:
         pass
+
     finally:
         print(f"Client {addr} disconnected")  # use addr, always defined
         game.remove_client(conn)
