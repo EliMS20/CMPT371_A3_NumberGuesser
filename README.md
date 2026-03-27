@@ -7,7 +7,7 @@
 - Connect to a game server, and guess randomly generated numbers
 - Compete with other players and gain points based on how close your guess is
 ## **Limitations**
-- Running with a large amount of people connecting using threads. No player max capacity set, and large player numbers could cause performance issues
+- Running with a large amount of clients connecting using threads could cause performance issues. No player max capacity set, and large player numbers have not been tested.
 - People disconnecting mid-game cannot reconnect
 - No security, all data is sent as normal plaintext and not encrypted.
 ## **WorkFlow**
