@@ -3,25 +3,25 @@ import threading
 import os
 
 stop_event = threading.Event()
-
+# Wait to receive a message from the server, and upon receiving, do actions
 def receive(client):
     while not stop_event.is_set():
         try:
             data = client.recv(4096)
             if not data:
                 if not stop_event.is_set():
-                    print("\nServer disconnected.")
+                    print("\nServer disconnect")
                     stop_event.set()
                     os._exit(0)
                 break
 
             msg = data.decode('utf-8')
-
+            # Check if game is over, and whether should
             if "GAME_OVER_BYE" in msg:
                 clean_msg = msg.replace("GAME_OVER_BYE", "").strip()
                 if clean_msg:
                     print(f"\n{clean_msg}")
-                print("\nGame over! Thanks for playing.")
+                print("\nGAME OVER")
                 stop_event.set()
                 os._exit(0)
                 break
@@ -30,7 +30,7 @@ def receive(client):
 
         except:
             if not stop_event.is_set():
-                print("\nLost connection to server.")
+                print("\nNo Connection to Server")
                 stop_event.set()
                 os._exit(0)
             break
@@ -42,20 +42,19 @@ def main():
     try:
         client.connect(('127.0.0.1', 5050))
     except ConnectionRefusedError:
-        print("Could not connect to server.")
+        print("Could not connect to server")
         return
 
-    # Name handshake BEFORE starting receive thread so it can't intercept the response
     while True:
-        name = input("Enter your name: ")
+        name = input("Enter name: ")
         client.send(f"CONNECT:{name}".encode('utf-8'))
         response = client.recv(1024).decode('utf-8').strip()
 
         if response == "NAME_OK":
-            print(f"Joined as {name}! Waiting for game to start...")
+            print(f"Hello {name}! Waiting for other players. Game will start soon.")
             break
         elif response == "NAME_TAKEN":
-            print(f"Name '{name}' is already taken, try another.")
+            print(f"Name '{name}' Has been taken, input another: ")
 
     # Only start receive thread once name is accepted
     thread = threading.Thread(target=receive, args=(client,))
@@ -73,12 +72,11 @@ def main():
         stop_event.set()
         try:
             client.send("DISCONNECT".encode('utf-8'))
-            print("\nDisconnecting...")
         except:
             pass
     finally:
         client.close()
-        print("Disconnected.")
+        print("Disconnected")
 
 if __name__ == "__main__":
     main()
