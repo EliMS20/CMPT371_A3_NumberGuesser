@@ -12,3 +12,26 @@
 - No security, all data is sent as normal plaintext and is not encrypted.
 ## **WorkFlow**
 ## **Step by Step How To Guide**
+1) Begin by cloning this repository **or** downloading this repository as a zip file directly from github.
+```bash
+git clone https://github.com/your-username/your-repo.git
+```
+2) Open the repository folder in your terminal then run the following command:
+```bash
+python server.py
+```
+3) Open the repository folder inside two additional terminal instances and run the following command in each terminal:
+```bash
+python client.py
+```
+4) In each instance of **client.py** you will be greeted with this message:
+```bash
+Enter your name:
+```
+5) Type in a name in the prompt for each **client.py** instance and **press enter**.
+6) Once you have setup both instances of **client.py** you will be prompted with:
+```bash
+You have 10 seconds! Guess a number between 1 and 100:
+```
+7) You will have 10 seconds to type a number and when you finishing typing a number **press enter**.
+8) **IF YOU WANT TO CLOSE A CLIENT: PRESS CTRL-C**
