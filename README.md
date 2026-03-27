@@ -1,11 +1,15 @@
 # 371-project NumberGuesser
 - Grant Deng 301586691 gjd4@sfu.ca
-- Eijah Mangoyab Santos 301 emrmr
+- Elijah Mangoyab Santos 301577116 erm6@sfu.ca
 
 ## **Multi-player Number Guessing Game**
 - An interactive number guessing game with multiple simultaneous players.
 - Connect to a game server, and guess randomly generated numbers over several pre-set rounds.
 - Compete with other players and gain points based on how close your guess is. Most points win!
+## **Questions**
+- How to handle multiple Clients at the same time
+- How to prevent Data Races, and keep data accurate
+- How to wait for other clients
 ## **Limitations**
 - Running with a large amount of clients connecting using threads could cause performance issues. No player max capacity set, and large player numbers have not been tested.
 - People disconnecting mid-game cannot reconnect
