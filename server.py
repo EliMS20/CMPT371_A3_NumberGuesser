@@ -14,9 +14,16 @@ def handle_client(conn, addr):
                 break
 
             if data.startswith("CONNECT"):
-                # Parse name from "CONNECT:name"
                 name = data.split(":")[1] if ":" in data else "Unknown"
+
+                # Keep asking until a unique name is given
+                while game.is_name_taken(name):
+                    conn.send("NAME_TAKEN".encode('utf-8'))
+                    data = conn.recv(1024).decode('utf-8').strip()
+                    name = data.split(":")[1] if ":" in data else "Unknown"
+
                 game.add_client(conn, name)
+                conn.send("NAME_OK".encode('utf-8'))
                 print(f"{name} connected, total clients: {len(game.clients)}")
 
             elif data == "DISCONNECT":
@@ -31,7 +38,7 @@ def handle_client(conn, addr):
     except:
         pass
     finally:
-        print(f"Client {name} disconnected")
+        print(f"Client {addr} disconnected")  # use addr, always defined
         game.remove_client(conn)
         conn.close()
 

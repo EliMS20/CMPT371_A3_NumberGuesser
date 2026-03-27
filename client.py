@@ -18,11 +18,10 @@ def receive(client):
             msg = data.decode('utf-8')
 
             if "GAME_OVER_BYE" in msg:
-                clean_msg = msg.replace("GAME_OVER_BYE", "")
-                if clean_msg.strip():
+                clean_msg = msg.replace("GAME_OVER_BYE", "").strip()
+                if clean_msg:
                     print(f"\n{clean_msg}")
-                
-                print("\nThe game has ended. Final scores received.")
+                print("\nGame over! Thanks for playing.")
                 stop_event.set()
                 os._exit(0)
                 break
@@ -35,7 +34,7 @@ def receive(client):
                 stop_event.set()
                 os._exit(0)
             break
-    
+
     client.close()
 
 def main():
@@ -46,12 +45,22 @@ def main():
         print("Could not connect to server.")
         return
 
+    # Name handshake BEFORE starting receive thread so it can't intercept the response
+    while True:
+        name = input("Enter your name: ")
+        client.send(f"CONNECT:{name}".encode('utf-8'))
+        response = client.recv(1024).decode('utf-8').strip()
+
+        if response == "NAME_OK":
+            print(f"Joined as {name}! Waiting for game to start...")
+            break
+        elif response == "NAME_TAKEN":
+            print(f"Name '{name}' is already taken, try another.")
+
+    # Only start receive thread once name is accepted
     thread = threading.Thread(target=receive, args=(client,))
     thread.daemon = True
     thread.start()
-
-    name = input("Enter your name: ")
-    client.send(f"CONNECT:{name}".encode('utf-8'))
 
     try:
         while not stop_event.is_set():

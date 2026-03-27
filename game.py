@@ -19,6 +19,10 @@ def broadcast(message):
         except:
             pass
 
+def is_name_taken(name):
+    with lock:
+        return name in names.values()
+
 def add_client(conn, name):
     with lock:
         clients.append(conn)
@@ -67,11 +71,10 @@ def display_scoreboard(title="--- SCOREBOARD ---"):
     board += "------------------\n"
     broadcast(board)
 
-def disconnect_all():    
+def disconnect_all():
+    display_scoreboard("--- FINAL SCORES ---")  # show final scores before disconnecting
     broadcast("GAME_OVER_BYE")
-
-    time.sleep(1) 
-
+    time.sleep(1)
     with lock:
         for conn in clients:
             try:
