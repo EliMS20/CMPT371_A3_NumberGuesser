@@ -7,8 +7,6 @@ PORT = 5050
 NUM_PLAYERS = 2
 
 def handle_client(conn, addr):
-    print(f"New connection from {addr}")
-
     try:
         while True:
             data = conn.recv(1024).decode('utf-8').strip()
@@ -22,7 +20,6 @@ def handle_client(conn, addr):
                 print(f"{name} connected, total clients: {len(game.clients)}")
 
             elif data == "DISCONNECT":
-                print(f"{addr} disconnected voluntarily")
                 break
 
             else:
@@ -34,7 +31,7 @@ def handle_client(conn, addr):
     except:
         pass
     finally:
-        print(f"Client {addr} disconnected")
+        print(f"Client {name} disconnected")
         game.remove_client(conn)
         conn.close()
 
@@ -43,7 +40,7 @@ def start_server():
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((HOST, PORT))
     server.listen()
-    server.settimeout(1)
+    server.settimeout(0.1)
 
     print(f"Server listening on {HOST}:{PORT}")
 

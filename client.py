@@ -5,25 +5,41 @@ import os
 stop_event = threading.Event()
 
 def receive(client):
-    while True:
+    while not stop_event.is_set():
         try:
-            msg = client.recv(1024).decode('utf-8')
-            if msg:
-                print(f"\nServer: {msg}")
-            else:
-                print("\nServer disconnected. Press Enter to exit.")
+            data = client.recv(4096)
+            if not data:
+                if not stop_event.is_set():
+                    print("\nServer disconnected.")
+                    stop_event.set()
+                    os._exit(0)
+                break
+
+            msg = data.decode('utf-8')
+
+            if "GAME_OVER_BYE" in msg:
+                clean_msg = msg.replace("GAME_OVER_BYE", "")
+                if clean_msg.strip():
+                    print(f"\n{clean_msg}")
+                
+                print("\nThe game has ended. Final scores received.")
                 stop_event.set()
-                client.close()
-                os._exit(0)  # force kill the whole program including blocked input()
+                os._exit(0)
+                break
+
+            print(f"\n{msg}")
+
         except:
-            print("\nLost connection to server. Press Enter to exit.")
-            stop_event.set()
-            os._exit(0)
+            if not stop_event.is_set():
+                print("\nLost connection to server.")
+                stop_event.set()
+                os._exit(0)
             break
+    
+    client.close()
 
 def main():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
     try:
         client.connect(('127.0.0.1', 5050))
     except ConnectionRefusedError:
@@ -40,16 +56,17 @@ def main():
     try:
         while not stop_event.is_set():
             msg = input()
-            if msg and not stop_event.is_set():
+            if stop_event.is_set():
+                break
+            if msg:
                 client.send(msg.encode('utf-8'))
-
     except KeyboardInterrupt:
-        print("\nDisconnecting from server...")
+        stop_event.set()
         try:
             client.send("DISCONNECT".encode('utf-8'))
+            print("\nDisconnecting...")
         except:
             pass
-
     finally:
         client.close()
         print("Disconnected.")

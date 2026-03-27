@@ -1,7 +1,8 @@
 import random
 import threading
+import time
 
-ROUNDS = 10
+ROUNDS = 3
 GUESS_TIME = 10
 
 guesses = {}
@@ -66,9 +67,11 @@ def display_scoreboard(title="--- SCOREBOARD ---"):
     board += "------------------\n"
     broadcast(board)
 
-def disconnect_all():
-    display_scoreboard("--- FINAL SCORES ---")
-    broadcast("Game over! Disconnecting...\n")
+def disconnect_all():    
+    broadcast("GAME_OVER_BYE")
+
+    time.sleep(1) 
+
     with lock:
         for conn in clients:
             try:
@@ -106,14 +109,10 @@ def play_game():
 def game_loop(num_players):
     while True:
         print(f"Waiting for {num_players} players...")
-
         while len(clients) < num_players:
-            pass
+            time.sleep(0.1)
 
         broadcast(f"All players connected! Starting {ROUNDS} rounds!\n")
-
         play_game()
-
         disconnect_all()
-
-        print("All players disconnected. Waiting for new game...\n")
+        print("Game finished. Waiting for new players...\n")
