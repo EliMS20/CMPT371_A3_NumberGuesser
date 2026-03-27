@@ -51,6 +51,8 @@ def main():
         response = client.recv(1024).decode('utf-8').strip()
 
         if response == "NAME_OK":
+            client_ip, client_port = client.getsockname()
+            print(f"Connected from IP: {client_ip}, Port: {client_port}")
             print(f"Hello {name}! Waiting for other players. Game will start soon.")
             break
         elif response == "NAME_TAKEN":

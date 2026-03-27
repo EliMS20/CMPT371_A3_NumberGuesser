@@ -42,7 +42,7 @@ def handle_client(conn, addr):
 
                 game.add_client(conn, name)
                 conn.send("NAME_OK".encode('utf-8'))
-                print(f"{name} connected, total clients: {len(game.clients)}")
+                print(f"{name} ({addr}) connected, total clients: {len(game.clients)}")
 
             elif data == "DISCONNECT":
                 break
@@ -57,13 +57,12 @@ def handle_client(conn, addr):
         pass
 
     finally:
-        print(f"Client {addr} disconnected")  # use addr, always defined
+        print(f"Client {name} ({addr}) disconnected")  # use addr, always defined
         game.remove_client(conn)
         conn.close()
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((HOST, PORT))
     server.listen()
     server.settimeout(0.1)
