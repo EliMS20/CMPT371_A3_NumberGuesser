@@ -8,4 +8,5 @@
 - People disconnecting mid-game trying to reconnect
 - Starting and closing the server and clients simultaneously
 - No security, all data is sent as normal plaintext and not encrypted.
+## **WorkFlow**
 ## **Step by Step How To Guide**
