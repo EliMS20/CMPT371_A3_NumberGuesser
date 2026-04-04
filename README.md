@@ -1,6 +1,6 @@
 # 371-project NumberGuesser
 - Grant Deng 301586691 gjd4@sfu.ca
-- Elijah Mangoyab Santos 301577116 erm6@sfu.ca
+- Elijah Mangoyob Santos 301577116 erm6@sfu.ca
 
 ## **Multi-player Number Guessing Game**
 - An interactive number guessing game with multiple simultaneous players.
