@@ -26,7 +26,7 @@ git clone https://github.com/your-username/your-repo.git
 ```bash
 python server.py
 ```
-3) Open the repository folder inside two additional terminal instances and run the following command in each terminal:
+3) Open the repository folder inside **two additional terminal instances** and run the following command **in each terminal**:
 ```bash
 python client.py
 ```
