@@ -8,13 +8,13 @@
 - Compete with other players and gain points based on how close your guess is. Most points win!
 ## **Questions**
 **How to handle multiple Clients at the same time**
-- The server must support multiple players at once, requiring concurrency. To solve this we used threading.
+- The server must support multiple players at once, requiring concurrency. Each client is handled in its own thread (handle_client), while the game logic runs in a separate thread (game_loop).
 
 **How do we prevent Data Races, and keep data accurate?**
-- Shared data such as scores and guesses must be synchronized to avoid inconsistencies when accessed by multiple threads. We used locks.
+- Shared data such as scores and guesses must be synchronized to avoid inconsistencies when accessed by multiple threads. We used locks. Shared data structures (clients, guesses, points, names) are protected using threading.lock.
 
 **How to wait for other clients**
-- The system must handle late or missing guesses while ensuring fairness across players with different network conditions. It also requires for coordination of which we used timers and locks.
+- The system must handle late or missing guesses while ensuring fairness across players with different network conditions. It also requires for coordination of which we used timers and locks. Additionally, a threading.Event (guess_event) is used to coordinate players.
 ## **Limitations**
 - Running with a large amount of clients connecting using threads could cause performance issues. No player max capacity set, and large player numbers have not been tested.
 - People disconnecting mid-game cannot reconnect
