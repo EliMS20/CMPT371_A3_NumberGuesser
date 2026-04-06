@@ -34,7 +34,7 @@ Our video demo shows the code running, establishing connections, data exchange (
 
 ## **Prerequisites**
 Requirements:
-- Python X.X
+- Python 3.10 or higher
 - No external libraries are required to run this application (we only used built-in Python libraries)
 - A terminal interface (to run the application)
 
