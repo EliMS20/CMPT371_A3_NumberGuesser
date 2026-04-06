@@ -7,9 +7,14 @@
 - Connect to a game server, and guess randomly generated numbers over several pre-set rounds.
 - Compete with other players and gain points based on how close your guess is. Most points win!
 ## **Questions**
-- How to handle multiple Clients at the same time
-- How to prevent Data Races, and keep data accurate
-- How to wait for other clients
+**How to handle multiple Clients at the same time**
+- The server must support multiple players at once, requiring concurrency. To solve this we used threading.
+
+**How do we prevent Data Races, and keep data accurate?**
+- Shared data such as scores and guesses must be synchronized to avoid inconsistencies when accessed by multiple threads. We used locks.
+
+**How to wait for other clients**
+- The system must handle late or missing guesses while ensuring fairness across players with different network conditions. It also requires for coordination of which we used timers and locks.
 ## **Limitations**
 - Running with a large amount of clients connecting using threads could cause performance issues. No player max capacity set, and large player numbers have not been tested.
 - People disconnecting mid-game cannot reconnect
