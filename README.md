@@ -1,4 +1,4 @@
-# 371-project NumberGuesser
+# CMPT 371 A3: NumberGuesser
 - Course: CMPT 371 - Data Communications & Networking
 - Instructor: Mirza Zaeem Baig
 - Semester: Spring 2026
